@@ -27,7 +27,7 @@ function App() {
         <Header />
 
         {/* Main Content */}
-        <main className="flex-1 max-w-4xl mx-auto px-4 py-12 w-full">
+        <main className="flex-1 max-w-[900px] mx-auto px-4 py-12 w-full">
           <Routes>
             <Route 
               path="/" 
