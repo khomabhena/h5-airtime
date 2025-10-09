@@ -14,6 +14,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button, input, select {
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
