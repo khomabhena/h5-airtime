@@ -23,6 +23,9 @@ const RecipientInput = ({ phoneData, setPhoneData }) => {
   // Use formatted number for display and validation
   const displayNumber = validation.formattedNumber || recipientNumber;
 
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleContinue = () => {
     if (validation.isValid && validation.carrier && validation.isComplete) {
       setPhoneData(prev => ({
@@ -32,9 +35,12 @@ const RecipientInput = ({ phoneData, setPhoneData }) => {
       }));
       navigate('/bundles');
     } else if (validation.carrier && !validation.isComplete) {
-      // Show alert for incomplete length
+      // Show error message instead of alert
       const remaining = validation.expectedLength.max - validation.currentLength;
-      alert(`Please complete the phone number. You need ${remaining} more digit${remaining > 1 ? 's' : ''}.`);
+      setErrorMessage(`Please complete the phone number. You need ${remaining} more digit${remaining > 1 ? 's' : ''}.`);
+      setShowError(true);
+      // Auto-hide error after 3 seconds
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
@@ -123,6 +129,18 @@ const RecipientInput = ({ phoneData, setPhoneData }) => {
                   }
                 </p>
               )}
+            </div>
+          )}
+
+          {/* Error Message */}
+          {showError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm text-red-600">{errorMessage}</p>
+              </div>
             </div>
           )}
 

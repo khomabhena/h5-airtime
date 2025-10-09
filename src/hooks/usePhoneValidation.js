@@ -32,44 +32,45 @@ export const usePhoneValidation = (phoneNumber) => {
 
   const debouncedValidation = useCallback(
     debounce(async (number) => {
-      setValidation(prev => ({ ...prev, loading: true }));
-
-      const formattedNumber = formatPhoneNumber(number);
-      const phoneValidation = validatePhoneNumber(formattedNumber);
-      
-      if (!phoneValidation.isValid) {
-        setValidation({
-          isValid: false,
-          error: phoneValidation.error,
-          carrier: null,
-          loading: false,
-          isComplete: false,
-          expectedLength: null,
-          currentLength: 0
-        });
-        return;
-      }
-
-      // Check phone number length for the specific country
-      const lengthValidation = validatePhoneNumberLength(formattedNumber);
-      
-      if (!lengthValidation.isValid) {
-        setValidation({
-          isValid: false,
-          error: lengthValidation.error,
-          carrier: null,
-          loading: false,
-          isComplete: lengthValidation.isComplete,
-          expectedLength: lengthValidation.expectedLength,
-          currentLength: lengthValidation.currentLength || 0
-        });
-        return;
-      }
-
       try {
+        setValidation(prev => ({ ...prev, loading: true }));
+
+        const formattedNumber = formatPhoneNumber(number);
+        const phoneValidation = validatePhoneNumber(formattedNumber);
+        
+        if (!phoneValidation.isValid) {
+          setValidation({
+            isValid: false,
+            error: phoneValidation.error,
+            carrier: null,
+            loading: false,
+            isComplete: false,
+            expectedLength: null,
+            currentLength: 0
+          });
+          return;
+        }
+
+        // Check phone number length for the specific country
+        const lengthValidation = validatePhoneNumberLength(formattedNumber);
+        
+        if (!lengthValidation.isValid) {
+          setValidation({
+            isValid: false,
+            error: lengthValidation.error,
+            carrier: null,
+            loading: false,
+            isComplete: lengthValidation.isComplete,
+            expectedLength: lengthValidation.expectedLength,
+            currentLength: lengthValidation.currentLength || 0
+          });
+          return;
+        }
+
+        // Simplified carrier detection for webview compatibility
         const carrier = detectCarrierFromPhone(formattedNumber);
         setValidation({
-          isValid: !!carrier, // Always show carrier if detected, regardless of length
+          isValid: !!carrier,
           error: carrier ? null : 'Unable to detect carrier for this number',
           carrier,
           loading: false,
@@ -78,6 +79,7 @@ export const usePhoneValidation = (phoneNumber) => {
           currentLength: lengthValidation.currentLength
         });
       } catch (error) {
+        console.warn('Phone validation error:', error);
         setValidation({
           isValid: false,
           error: 'Error detecting carrier',
@@ -88,7 +90,7 @@ export const usePhoneValidation = (phoneNumber) => {
           currentLength: 0
         });
       }
-    }, 500),
+    }, 300), // Reduced debounce time for better webview performance
     []
   );
 
