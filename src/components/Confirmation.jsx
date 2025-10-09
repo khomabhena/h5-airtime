@@ -31,8 +31,8 @@ const Confirmation = ({ phoneData, selectedBundle, paymentData }) => {
     <div className="space-y-6">
       {/* Success Header */}
       <div className="text-center">
-        <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#8dd00020'}}>
+          <svg className="w-10 h-10" style={{color: '#8dd000'}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -79,22 +79,22 @@ const Confirmation = ({ phoneData, selectedBundle, paymentData }) => {
           <hr className="border-gray-200" />
           <div className="flex justify-between text-base font-bold">
             <span>Total Paid</span>
-            <span className="text-emerald-600">{formatCurrency(safeSelectedBundle.price || 0)}</span>
+            <span style={{color: '#8dd000'}}>{formatCurrency(safeSelectedBundle.price || 0)}</span>
           </div>
         </div>
       </div>
 
       {/* Delivery Status */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+      <div className="rounded-lg p-3" style={{backgroundColor: '#8dd00020', borderColor: '#8dd000'}}>
         <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{backgroundColor: '#8dd000'}}>
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <div>
-            <p className="font-semibold text-emerald-800 text-sm">Delivered Successfully</p>
-            <p className="text-xs text-emerald-600">
+            <p className="font-semibold text-sm" style={{color: '#8dd000'}}>Delivered Successfully</p>
+            <p className="text-xs" style={{color: '#8dd000'}}>
               {safeSelectedBundle.amount || 'Airtime'} has been added to {displayPhoneNumber}
             </p>
           </div>

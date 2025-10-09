@@ -129,7 +129,7 @@ const PaymentFlow = ({ phoneData, selectedBundle, setPaymentData }) => {
           <hr className="border-gray-200" />
           <div className="flex justify-between text-base font-bold">
             <span>Total</span>
-            <span className="text-emerald-600">{formatCurrency(selectedBundle?.price || 0)}</span>
+            <span style={{color: '#8dd000'}}>{formatCurrency(selectedBundle?.price || 0)}</span>
           </div>
         </div>
       </div>
@@ -144,14 +144,15 @@ const PaymentFlow = ({ phoneData, selectedBundle, setPaymentData }) => {
               onClick={() => setPaymentMethod(method.id)}
               className={`w-full flex items-center space-x-3 p-3 rounded-lg border-2 transition-all ${
                 paymentMethod === method.id
-                  ? 'border-emerald-500 bg-emerald-50'
-                  : 'border-gray-200 hover:border-emerald-300'
+                  ? 'border-gray-200'
+                  : 'border-gray-200 hover:border-gray-300'
               }`}
+              style={paymentMethod === method.id ? {borderColor: '#8dd000', backgroundColor: '#8dd00020'} : {}}
             >
               <span className="text-lg">{method.icon}</span>
-              <span className="font-medium text-sm">{method.name}</span>
+              <span className="font-medium text-sm" style={paymentMethod === method.id ? {color: '#8dd000'} : {}}>{method.name}</span>
               {paymentMethod === method.id && (
-                <svg className="w-4 h-4 text-emerald-600 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 ml-auto" style={{color: '#8dd000'}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               )}

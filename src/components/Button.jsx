@@ -14,11 +14,11 @@ const Button = ({
   const baseClasses = 'font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5',
+    primary: 'text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5',
     secondary: 'bg-white border-2 border-gray-300 text-gray-700 hover:border-gray-400',
     danger: 'bg-red-500 text-white hover:bg-red-600 shadow-md hover:shadow-lg',
     success: 'bg-green-500 text-white hover:bg-green-600 shadow-md hover:shadow-lg',
-    ghost: 'bg-transparent text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50'
+    ghost: 'bg-transparent hover:bg-gray-50'
   };
   
   const sizeClasses = {
@@ -32,18 +32,23 @@ const Button = ({
     : '';
   
   const focusClasses = {
-    primary: 'focus:ring-emerald-500',
+    primary: 'focus:ring-[#8dd000]',
     secondary: 'focus:ring-gray-500',
     danger: 'focus:ring-red-500',
     success: 'focus:ring-green-500',
-    ghost: 'focus:ring-emerald-500'
+    ghost: 'focus:ring-[#8dd000]'
   };
+
+  const primaryStyle = variant === 'primary' && !disabled && !loading 
+    ? { backgroundColor: '#8dd000' }
+    : {};
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
+      style={primaryStyle}
       className={`
         ${baseClasses}
         ${variantClasses[variant]}
