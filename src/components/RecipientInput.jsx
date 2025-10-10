@@ -54,7 +54,7 @@ const RecipientInput = ({ phoneData, setPhoneData }) => {
       <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
         <div className="text-center mb-6">
           <p className="text-lg font-bold text-gray-800 mb-2">
-            Recipients Phone Number!
+            Recipient Phone Number!
           </p>
           <p className="text-sm text-gray-600">
             Enter the recipient's phone number

@@ -2,17 +2,29 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBundlesByType, bundleTypes } from '../data/bundles';
 import { getBundleIcon } from '../utils/uiUtils.jsx';
+import CustomAirtimeInput from './CustomAirtimeInput';
 import Button from './Button';
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
   const [bundleType, setBundleType] = useState('airtime');
+  const [customBundle, setCustomBundle] = useState(null);
 
   // Get bundles from data layer
   const bundles = getBundlesByType(bundleType);
 
   const handleBundleSelect = (bundle) => {
     setSelectedBundle(bundle);
+    setCustomBundle(null); // Clear custom bundle when selecting predefined bundle
+  };
+
+  const handleCustomBundleChange = (customBundleData) => {
+    setCustomBundle(customBundleData);
+    if (customBundleData) {
+      setSelectedBundle(customBundleData);
+    } else {
+      setSelectedBundle(null);
+    }
   };
 
   const handleContinue = () => {
@@ -67,12 +79,23 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
 
       {/* Bundle Grid */}
       <div className="grid md:grid-cols-2 gap-4">
+        {/* Custom Airtime Input - Only show for airtime bundle type, positioned at the top */}
+        {bundleType === 'airtime' && (
+          <div className={`${customBundle ? 'md:col-span-2' : ''}`}>
+            <CustomAirtimeInput
+              onCustomAmountChange={handleCustomBundleChange}
+              minAmount={1}
+              maxAmount={1000}
+            />
+          </div>
+        )}
+        
         {bundles.map((bundle) => (
           <div
             key={bundle.id}
             onClick={() => handleBundleSelect(bundle)}
             className={`bg-white rounded-xl p-4 border-2 cursor-pointer transition-all hover:shadow-md ${
-              selectedBundle?.id === bundle.id
+              selectedBundle?.id === bundle.id && !selectedBundle?.isCustom
                 ? 'border-emerald-500 bg-emerald-50'
                 : 'border-gray-200 hover:border-emerald-300'
             }`}
@@ -92,7 +115,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
               <p className="text-gray-600 text-xs">{bundle.description}</p>
             </div>
 
-            {selectedBundle?.id === bundle.id && (
+            {selectedBundle?.id === bundle.id && !selectedBundle?.isCustom && (
               <div className="flex items-center space-x-2 text-emerald-600">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -110,7 +133,12 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
           <div className="flex items-center justify-between mb-3">
             <div>
               <h3 className="font-bold text-gray-800 text-xs">Order Summary</h3>
-              <p className="text-gray-600 text-xs">{selectedBundle.name} for {phoneData.recipientNumber}</p>
+              <p className="text-gray-600 text-xs">
+                {selectedBundle.isCustom 
+                  ? `Custom airtime ($${selectedBundle.amount}) for ${phoneData.recipientNumber}`
+                  : `${selectedBundle.name} for ${phoneData.recipientNumber}`
+                }
+              </p>
             </div>
             <div className="text-right">
               <div className="text-base font-bold text-emerald-600">${selectedBundle.price}</div>
