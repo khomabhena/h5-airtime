@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBundlesByType, bundleTypes } from '../data/bundles';
 import { getBundleIcon } from '../utils/uiUtils.jsx';
@@ -9,23 +9,30 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
   const [bundleType, setBundleType] = useState('airtime');
   const [customBundle, setCustomBundle] = useState(null);
+  const [clearCustomInput, setClearCustomInput] = useState(false);
 
   // Get bundles from data layer
   const bundles = getBundlesByType(bundleType);
 
-  const handleBundleSelect = (bundle) => {
-    setSelectedBundle(bundle);
-    setCustomBundle(null); // Clear custom bundle when selecting predefined bundle
-  };
+  const handleBundleSelect = useCallback((bundle) => {
+    setCustomBundle(null); // Clear custom bundle first
+    setSelectedBundle(bundle); // Then set the predefined bundle
+    // Only clear custom input if there was a custom bundle selected
+    if (customBundle) {
+      setClearCustomInput(true);
+      // Reset the clear flag immediately to prevent re-triggering
+      setTimeout(() => setClearCustomInput(false), 0);
+    }
+  }, [customBundle]);
 
-  const handleCustomBundleChange = (customBundleData) => {
+  const handleCustomBundleChange = useCallback((customBundleData) => {
     setCustomBundle(customBundleData);
     if (customBundleData) {
       setSelectedBundle(customBundleData);
     } else {
       setSelectedBundle(null);
     }
-  };
+  }, []);
 
   const handleContinue = () => {
     if (selectedBundle) {
@@ -86,6 +93,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
               onCustomAmountChange={handleCustomBundleChange}
               minAmount={1}
               maxAmount={1000}
+              clearInput={clearCustomInput}
             />
           </div>
         )}
@@ -95,7 +103,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
             key={bundle.id}
             onClick={() => handleBundleSelect(bundle)}
             className={`bg-white rounded-xl p-4 border-2 cursor-pointer transition-all hover:shadow-md ${
-              selectedBundle?.id === bundle.id && !selectedBundle?.isCustom
+              selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
                 ? 'border-emerald-500 bg-emerald-50'
                 : 'border-gray-200 hover:border-emerald-300'
             }`}
@@ -115,7 +123,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
               <p className="text-gray-600 text-xs">{bundle.description}</p>
             </div>
 
-            {selectedBundle?.id === bundle.id && !selectedBundle?.isCustom && (
+            {selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true && (
               <div className="flex items-center space-x-2 text-emerald-600">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

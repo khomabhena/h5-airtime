@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import InputField from './InputField';
 
-const CustomAirtimeInput = ({ onCustomAmountChange, minAmount = 1, maxAmount = 1000 }) => {
+const CustomAirtimeInput = ({ onCustomAmountChange, minAmount = 1, maxAmount = 1000, clearInput = false }) => {
   const [customAmount, setCustomAmount] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState('');
+
+  // Clear input when clearInput prop changes to true
+  useEffect(() => {
+    if (clearInput) {
+      setCustomAmount('');
+      setIsValid(false);
+      setError('');
+      onCustomAmountChange(null);
+    }
+  }, [clearInput]);
 
   useEffect(() => {
     if (customAmount === '') {
@@ -50,7 +60,7 @@ const CustomAirtimeInput = ({ onCustomAmountChange, minAmount = 1, maxAmount = 1
       description: `Custom airtime amount`,
       isCustom: true
     });
-  }, [customAmount, minAmount, maxAmount, onCustomAmountChange]);
+  }, [customAmount, minAmount, maxAmount]); // Remove onCustomAmountChange from dependencies
 
   const handleAmountChange = (e) => {
     const value = e.target.value;
