@@ -5,7 +5,7 @@ import { usePhoneValidation } from '../hooks/usePhoneValidation';
 import InputField from './InputField';
 import Button from './Button';
 
-const PhoneInput = ({ phoneData, setPhoneData }) => {
+const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState(phoneData.phoneNumber);
   const [selectedCountry, setSelectedCountry] = useState(phoneData.country);
@@ -37,12 +37,26 @@ const PhoneInput = ({ phoneData, setPhoneData }) => {
 
   const handleContinue = () => {
     if (validation.isValid && validation.carrier && validation.isComplete) {
-      setPhoneData({
+      const updatedPhoneData = {
         phoneNumber: displayNumber,
         country: selectedCountry,
         carrier: validation.carrier
-      });
-      navigate('/recipient');
+      };
+      
+      // If topping up for myself, set recipient data to the same as phone data
+      if (topUpType === 'myself') {
+        updatedPhoneData.recipientNumber = displayNumber;
+        updatedPhoneData.recipientCarrier = validation.carrier;
+      }
+      
+      setPhoneData(updatedPhoneData);
+      
+      // Navigate based on top-up type
+      if (topUpType === 'myself') {
+        navigate('/bundles'); // Skip recipient stage
+      } else {
+        navigate('/recipient'); // Go to recipient stage
+      }
     } else if (validation.carrier && !validation.isComplete) {
       // Show alert for incomplete length
       const remaining = validation.expectedLength.max - validation.currentLength;
@@ -56,11 +70,48 @@ const PhoneInput = ({ phoneData, setPhoneData }) => {
       <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
         <div className="text-center mb-6">
           <p className="text-lg font-bold text-gray-800 mb-2">
-            Your Mobile Number
+            {topUpType === 'myself' ? 'Your Mobile Number' : 'Your Mobile Number'}
           </p>
           <p className="text-sm text-gray-600">
-            Enter your phone number
+            {topUpType === 'myself' ? 'Enter your phone number' : 'Enter your phone number'}
           </p>
+        </div>
+
+        {/* Top-up Type Selection */}
+        <div className="mb-6">
+          <p className="text-sm font-medium text-gray-700 mb-3">Who are you topping up for?</p>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => setTopUpType('myself')}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                topUpType === 'myself'
+                  ? 'border-emerald-500 bg-emerald-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="text-sm font-medium">For Myself</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setTopUpType('someone')}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                topUpType === 'someone'
+                  ? 'border-emerald-500 bg-emerald-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="text-sm font-medium">For Someone Else</span>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Phone Input Section */}
@@ -141,8 +192,8 @@ const PhoneInput = ({ phoneData, setPhoneData }) => {
             loading={validation.loading}
             className="w-full"
           >
-            {validation.isValid && validation.isComplete 
-              ? 'Start top-up' 
+{validation.isValid && validation.isComplete 
+              ? (topUpType === 'myself' ? 'Continue to bundles' : 'Continue to recipient')
               : validation.isValid && !validation.isComplete
                 ? 'Complete phone number'
                 : 'Enter a valid phone number'

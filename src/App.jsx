@@ -18,6 +18,8 @@ function App() {
     recipientCarrier: null
   });
   
+  const [topUpType, setTopUpType] = useState('myself'); // 'myself' or 'someone'
+  
   const [selectedBundle, setSelectedBundle] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
 
@@ -35,6 +37,8 @@ function App() {
                 <PhoneInput 
                   phoneData={phoneData}
                   setPhoneData={setPhoneData}
+                  topUpType={topUpType}
+                  setTopUpType={setTopUpType}
                 />
               } 
             />
