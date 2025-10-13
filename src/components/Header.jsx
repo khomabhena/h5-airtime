@@ -20,7 +20,7 @@ const Header = () => {
           {showBackButton && (
             <div
               onClick={handleBackClick}
-              className=" flex items-center bg-red- justify-center w-10 h-10 rounded border-0 outline-none hover:bg-gray-50 transition-colors"
+              className=" hidden flex items-center bg-red- justify-center w-10 h-10 rounded border-0 outline-none hover:bg-gray-50 transition-colors"
               aria-label="Go back"
             >
               <svg className="w-6 h-6" style={{color: '#8dd000'}} fill="none" stroke="currentColor" viewBox="0 0 24 24">

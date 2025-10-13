@@ -73,8 +73,8 @@ const CustomAirtimeInput = ({ onCustomAmountChange, minAmount = 1, maxAmount = 1
   return (
     <div className="bg-white rounded-xl p-4 border-2 border-dashed border-gray-300 hover:border-emerald-300 transition-all">
       <div className="text-center mb-4">
-        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-          <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
         </div>
@@ -99,12 +99,12 @@ const CustomAirtimeInput = ({ onCustomAmountChange, minAmount = 1, maxAmount = 1
 
         {customAmount && isValid && (
           <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-emerald-800">Custom Amount</p>
-                <p className="text-xs text-emerald-600">${customAmount} airtime</p>
+                <p className="text-xs text-emerald-600 truncate">${customAmount} airtime</p>
               </div>
-              <div className="text-right">
+              <div className="text-right ml-3 flex-shrink-0">
                 <div className="text-base font-bold text-emerald-600">
                   ${(parseFloat(customAmount) * 1.1).toFixed(2)}
                 </div>
