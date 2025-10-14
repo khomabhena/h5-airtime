@@ -85,32 +85,30 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
               onClick={() => setTopUpType('myself')}
               className={`p-4 rounded-lg border-2 transition-all ${
                 topUpType === 'myself'
-                  ? 'border-gray-200'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-emerald-500 bg-emerald-50'
+                  : 'border-gray-200 hover:border-emerald-300'
               }`}
-              style={topUpType === 'myself' ? {borderColor: '#8dd002', backgroundColor: '#8dd002'} : {}}
             >
               <div className="flex flex-col items-center space-y-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={topUpType === 'myself' ? {color: '#8dd000'} : {}}>
+                <svg className={`w-6 h-6 ${topUpType === 'myself' ? 'text-emerald-600' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="text-sm font-medium" style={topUpType === 'myself' ? {color: '#8dd000'} : {}}>For Myself</span>
+                <span className={`text-sm font-medium ${topUpType === 'myself' ? 'text-emerald-600' : 'text-gray-700'}`}>For Myself</span>
               </div>
             </button>
             <button
               onClick={() => setTopUpType('someone')}
               className={`p-4 rounded-lg border-2 transition-all ${
                 topUpType === 'someone'
-                  ? 'border-gray-200'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-emerald-500 bg-emerald-50'
+                  : 'border-gray-200 hover:border-emerald-300'
               }`}
-              style={topUpType === 'someone' ? {borderColor: '#8dd000', backgroundColor: '#8dd00020'} : {}}
             >
               <div className="flex flex-col items-center space-y-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={topUpType === 'someone' ? {color: '#8dd000'} : {}}>
+                <svg className={`w-6 h-6 ${topUpType === 'someone' ? 'text-emerald-600' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span className="text-sm font-medium" style={topUpType === 'someone' ? {color: '#8dd000'} : {}}>For Someone Else</span>
+                <span className={`text-sm font-medium ${topUpType === 'someone' ? 'text-emerald-600' : 'text-gray-700'}`}>For Someone Else</span>
               </div>
             </button>
           </div>
