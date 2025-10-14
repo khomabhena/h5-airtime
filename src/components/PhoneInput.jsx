@@ -88,7 +88,7 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
                   ? 'border-gray-200'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
-              style={topUpType === 'myself' ? {borderColor: '#8dd000', backgroundColor: '#8dd00020'} : {}}
+              style={topUpType === 'myself' ? {borderColor: '#8dd002', backgroundColor: '#8dd002'} : {}}
             >
               <div className="flex flex-col items-center space-y-2">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={topUpType === 'myself' ? {color: '#8dd000'} : {}}>
