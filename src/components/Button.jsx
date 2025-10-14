@@ -1,4 +1,5 @@
 import React from 'react';
+import { colors } from '../data/colors';
 
 const Button = ({
   children,
@@ -32,15 +33,15 @@ const Button = ({
     : '';
   
   const focusClasses = {
-    primary: 'focus:ring-[#8dd000]',
+    primary: `focus:ring-[${colors.app.primary}]`,
     secondary: 'focus:ring-gray-500',
     danger: 'focus:ring-red-500',
     success: 'focus:ring-green-500',
-    ghost: 'focus:ring-[#8dd000]'
+    ghost: `focus:ring-[${colors.app.primary}]`
   };
 
   const primaryStyle = variant === 'primary' && !disabled && !loading 
-    ? { backgroundColor: '#8dd000' }
+    ? { backgroundColor: colors.app.primary }
     : {};
 
   return (

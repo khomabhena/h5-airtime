@@ -104,34 +104,54 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
             <div
               key={bundle.id}
               onClick={() => handleBundleSelect(bundle)}
-              className={`bg-white rounded-xl p-3 border-2 cursor-pointer transition-all hover:shadow-md ${
+              className={`rounded-xl p-3 border-2 cursor-pointer transition-all hover:shadow-md ${
                 selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                  ? 'border-emerald-500 bg-emerald-50'
-                  : 'border-gray-200 hover:border-emerald-300'
+                  ? 'border-[#8dd000] bg-[#8dd000] text-white'
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
               }`}
             >
               {/* Mobile Optimized Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-gray-800 truncate">{bundle.name}</h3>
+                  <h3 className={`text-sm font-bold truncate ${
+                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
+                      ? 'text-white'
+                      : 'text-gray-800'
+                  }`}>{bundle.name}</h3>
                 </div>
                 <div className="text-right ml-2 flex-shrink-0">
-                  <div className="text-base font-bold text-emerald-600">${bundle.price}</div>
-                  <div className="text-xs text-gray-500">USD</div>
+                  <div className={`text-base font-bold ${
+                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
+                      ? 'text-white'
+                      : 'text-emerald-600'
+                  }`}>${bundle.price}</div>
+                  <div className={`text-xs ${
+                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
+                      ? 'text-white'
+                      : 'text-gray-500'
+                  }`}>USD</div>
                 </div>
               </div>
               
               {/* Mobile Optimized Content */}
               <div className="mb-3">
-                <div className="text-lg font-bold text-gray-800 mb-1">
+                <div className={`text-lg font-bold mb-1 ${
+                  selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
+                    ? 'text-white'
+                    : 'text-gray-800'
+                }`}>
                   {bundle.amount}
                 </div>
-                <p className="text-gray-600 text-xs leading-relaxed">{bundle.description}</p>
+                <p className={`text-xs leading-relaxed ${
+                  selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
+                    ? 'text-white'
+                    : 'text-gray-600'
+                }`}>{bundle.description}</p>
               </div>
 
               {/* Selection Indicator */}
               {selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true && (
-                <div className="flex items-center space-x-2 text-emerald-600">
+                <div className="flex items-center space-x-2 text-white">
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
