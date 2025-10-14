@@ -86,7 +86,7 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
               className={`p-4 rounded-lg border-2 transition-all ${
                 topUpType === 'myself'
                   ? 'border-[#8dd000] bg-[#8dd000] text-white'
-                  : 'border-emerald-200 bg-white hover:border-emerald-400 hover:bg-emerald-25'
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
@@ -101,7 +101,7 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
               className={`p-4 rounded-lg border-2 transition-all ${
                 topUpType === 'someone'
                   ? 'border-[#8dd000] bg-[#8dd000] text-white'
-                  : 'border-emerald-200 bg-white hover:border-emerald-400 hover:bg-emerald-25'
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
