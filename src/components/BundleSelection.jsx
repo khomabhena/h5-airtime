@@ -4,6 +4,7 @@ import { getBundlesByType, bundleTypes } from '../data/bundles';
 import { getBundleIcon } from '../utils/uiUtils.jsx';
 import CustomAirtimeInput from './CustomAirtimeInput';
 import Button from './Button';
+import { colors } from '../data/colors';
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
@@ -106,7 +107,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
               onClick={() => handleBundleSelect(bundle)}
               className={`rounded-xl p-3 border-2 cursor-pointer transition-all hover:shadow-md ${
                 selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                  ? 'border-[#8dd000] bg-[#8dd000] text-white'
+                  ? `border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white`
                   : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
               }`}
             >

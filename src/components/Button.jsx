@@ -15,7 +15,7 @@ const Button = ({
   const baseClasses = 'font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
-    primary: 'text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5',
+    primary: 'bg-[#8dd000] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:bg-[#6ba300]',
     secondary: 'bg-white border-2 border-gray-300 text-gray-700 hover:border-gray-400',
     danger: 'bg-red-500 text-white hover:bg-red-600 shadow-md hover:shadow-lg',
     success: 'bg-green-500 text-white hover:bg-green-600 shadow-md hover:shadow-lg',
@@ -40,9 +40,8 @@ const Button = ({
     ghost: `focus:ring-[${colors.app.primary}]`
   };
 
-  const primaryStyle = variant === 'primary' && !disabled && !loading 
-    ? { backgroundColor: colors.app.primary }
-    : {};
+  // Remove inline style since we're using Tailwind classes now
+  const primaryStyle = {};
 
   return (
     <button
