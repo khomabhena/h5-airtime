@@ -70,17 +70,17 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
       {/* Main Top-up Card - Similar to ding */}
       <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
         <div className="text-center mb-6">
-          <p className="text-lg font-bold text-gray-800 mb-2">
+          <p className="text-base font-bold text-gray-800 mb-2">
             {topUpType === 'myself' ? 'Your Mobile Number' : 'Your Mobile Number'}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs text-gray-600">
             {topUpType === 'myself' ? 'Enter your phone number' : 'Enter your phone number'}
           </p>
         </div>
 
         {/* Top-up Type Selection */}
         <div className="mb-6">
-          <p className="text-sm font-medium text-gray-700 mb-3">Who are you topping up for?</p>
+          <p className="text-xs font-medium text-gray-700 mb-3">Who are you topping up for?</p>
           <div className="grid grid-cols-2 gap-3">
             <ReusableButton
               onClick={() => setTopUpType('myself')}
@@ -92,7 +92,7 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
                 </svg>
               }
             >
-              For Myself
+              For Me
             </ReusableButton>
             <ReusableButton
               onClick={() => setTopUpType('someone')}
@@ -104,7 +104,7 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
                 </svg>
               }
             >
-              For Someone Else
+              For a friend
             </ReusableButton>
           </div>
         </div>

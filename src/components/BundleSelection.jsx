@@ -53,12 +53,12 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
           >
             {phoneData.recipientCarrier?.carrier.logoText}
           </div>
-          <div className="text-left">
-            <h2 className="text-base font-bold text-gray-800">{phoneData.recipientCarrier?.carrier.name}</h2>
-            <p className="text-sm text-gray-600">{phoneData.recipientNumber}</p>
-          </div>
+        <div className="text-left">
+          <h2 className="text-sm font-bold text-gray-800">{phoneData.recipientCarrier?.carrier.name}</h2>
+          <p className="text-xs text-gray-600">{phoneData.recipientNumber}</p>
         </div>
-        <p className="text-base font-bold text-gray-800 mb-2">
+        </div>
+        <p className="text-sm font-bold text-gray-800 mb-2">
           Choose your bundle
         </p>
         <p className="text-xs text-gray-600">
@@ -76,7 +76,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
               selected={bundleType === key}
               variant="selection"
               size="sm"
-              className="py-3 px-2 text-xs font-medium"
+              className="py-2 px-2 text-xs font-medium"
               icon={<span className="text-sm">{getBundleIcon(key)}</span>}
             >
               {type.name}

@@ -91,11 +91,11 @@ const ReusableButton = ({
   // Size classes
   const getSizeClasses = () => {
     switch (size) {
-      case 'sm': return 'py-2 px-3 text-sm rounded-lg';
-      case 'md': return 'py-3 px-4 text-base rounded-lg';
-      case 'lg': return 'py-4 px-6 text-lg rounded-xl';
-      case 'xl': return 'py-5 px-8 text-xl rounded-2xl';
-      default: return 'py-3 px-4 text-base rounded-lg';
+      case 'sm': return 'py-2 px-3 text-xs rounded-lg';
+      case 'md': return 'py-3 px-4 text-sm rounded-lg';
+      case 'lg': return 'py-4 px-6 text-base rounded-xl';
+      case 'xl': return 'py-5 px-8 text-lg rounded-2xl';
+      default: return 'py-3 px-4 text-sm rounded-lg';
     }
   };
   
@@ -138,14 +138,14 @@ const ReusableButton = ({
             <div className="flex items-start justify-between mb-3">
               {title && (
                 <div className="flex-1 min-w-0">
-                  <h3 className={`text-sm font-bold truncate ${
+                  <h3 className={`text-xs font-bold truncate ${
                     selected ? 'text-white' : 'text-gray-800'
                   }`}>{title}</h3>
                 </div>
               )}
               {price && (
                 <div className="text-right ml-2 flex-shrink-0">
-                  <div className={`text-base font-bold ${
+                  <div className={`text-sm font-bold ${
                     selected ? 'text-white' : 'text-emerald-600'
                   }`}>${price}</div>
                   <div className={`text-xs ${
@@ -159,7 +159,7 @@ const ReusableButton = ({
           {/* Content */}
           <div className="mb-3">
             {children && (
-              <div className={`text-lg font-bold mb-1 ${
+              <div className={`text-sm font-bold mb-1 ${
                 selected ? 'text-white' : 'text-gray-800'
               }`}>
                 {children}
@@ -178,7 +178,7 @@ const ReusableButton = ({
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="font-medium text-sm">Selected</span>
+              <span className="font-medium text-xs">Selected</span>
             </div>
           )}
         </div>
@@ -192,7 +192,7 @@ const ReusableButton = ({
           <div className="flex items-center justify-center">
             {icon}
           </div>
-          <span className="text-sm font-medium">{children}</span>
+          <span className="text-xs font-medium">{children}</span>
         </div>
       );
     }
