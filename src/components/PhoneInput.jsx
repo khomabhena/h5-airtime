@@ -4,6 +4,7 @@ import { getAllCountries } from '../data/carriers';
 import { usePhoneValidation } from '../hooks/usePhoneValidation';
 import InputField from './InputField';
 import Button from './Button';
+import { ReusableButton } from './buttons';
 
 const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
   const navigate = useNavigate();
@@ -81,36 +82,30 @@ const PhoneInput = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
         <div className="mb-6">
           <p className="text-sm font-medium text-gray-700 mb-3">Who are you topping up for?</p>
           <div className="grid grid-cols-2 gap-3">
-            <button
+            <ReusableButton
               onClick={() => setTopUpType('myself')}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                topUpType === 'myself'
-                  ? 'border-[#8dd000] bg-[#8dd000] text-white'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex flex-col items-center space-y-2">
-                <svg className={`w-6 h-6 ${topUpType === 'myself' ? 'text-white' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              selected={topUpType === 'myself'}
+              variant="selection"
+              icon={
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className={`text-sm font-medium ${topUpType === 'myself' ? 'text-white' : 'text-gray-700'}`}>For Myself</span>
-              </div>
-            </button>
-            <button
-              onClick={() => setTopUpType('someone')}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                topUpType === 'someone'
-                  ? 'border-[#8dd000] bg-[#8dd000] text-white'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-              }`}
+              }
             >
-              <div className="flex flex-col items-center space-y-2">
-                <svg className={`w-6 h-6 ${topUpType === 'someone' ? 'text-white' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              For Myself
+            </ReusableButton>
+            <ReusableButton
+              onClick={() => setTopUpType('someone')}
+              selected={topUpType === 'someone'}
+              variant="selection"
+              icon={
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span className={`text-sm font-medium ${topUpType === 'someone' ? 'text-white' : 'text-gray-700'}`}>For Someone Else</span>
-              </div>
-            </button>
+              }
+            >
+              For Someone Else
+            </ReusableButton>
           </div>
         </div>
 

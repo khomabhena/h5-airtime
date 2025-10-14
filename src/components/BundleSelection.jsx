@@ -4,6 +4,7 @@ import { getBundlesByType, bundleTypes } from '../data/bundles';
 import { getBundleIcon } from '../utils/uiUtils.jsx';
 import CustomAirtimeInput from './CustomAirtimeInput';
 import Button from './Button';
+import { ReusableButton } from './buttons';
 import { colors } from '../data/colors';
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
@@ -69,18 +70,17 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
       <div className="bg-white rounded-xl shadow-md p-3 border border-gray-100">
         <div className="grid grid-cols-2 gap-1 bg-gray-100 p-1 rounded-xl">
           {Object.entries(bundleTypes).map(([key, type]) => (
-            <button
+            <ReusableButton
               key={key}
               onClick={() => setBundleType(key)}
-              className={`flex items-center justify-center space-x-1 py-3 px-2 rounded-lg font-medium text-xs transition-all ${
-                bundleType === key
-                  ? 'bg-white text-emerald-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
+              selected={bundleType === key}
+              variant="selection"
+              size="sm"
+              className="py-3 px-2 text-xs font-medium"
+              icon={<span className="text-sm">{getBundleIcon(key)}</span>}
             >
-              <span className="text-sm">{getBundleIcon(key)}</span>
-              <span className="truncate">{type.name}</span>
-            </button>
+              {type.name}
+            </ReusableButton>
           ))}
         </div>
       </div>
@@ -102,64 +102,17 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
         {/* Bundle Cards - Mobile First Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {bundles.map((bundle) => (
-            <div
+            <ReusableButton
               key={bundle.id}
               onClick={() => handleBundleSelect(bundle)}
-              className={`rounded-xl p-3 border-2 cursor-pointer transition-all hover:shadow-md ${
-                selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                  ? `border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white`
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-              }`}
+              selected={selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true}
+              variant="card"
+              title={bundle.name}
+              price={bundle.price}
+              description={bundle.description}
             >
-              {/* Mobile Optimized Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1 min-w-0">
-                  <h3 className={`text-sm font-bold truncate ${
-                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                      ? 'text-white'
-                      : 'text-gray-800'
-                  }`}>{bundle.name}</h3>
-                </div>
-                <div className="text-right ml-2 flex-shrink-0">
-                  <div className={`text-base font-bold ${
-                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                      ? 'text-white'
-                      : 'text-emerald-600'
-                  }`}>${bundle.price}</div>
-                  <div className={`text-xs ${
-                    selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                      ? 'text-white'
-                      : 'text-gray-500'
-                  }`}>USD</div>
-                </div>
-              </div>
-              
-              {/* Mobile Optimized Content */}
-              <div className="mb-3">
-                <div className={`text-lg font-bold mb-1 ${
-                  selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                    ? 'text-white'
-                    : 'text-gray-800'
-                }`}>
-                  {bundle.amount}
-                </div>
-                <p className={`text-xs leading-relaxed ${
-                  selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true
-                    ? 'text-white'
-                    : 'text-gray-600'
-                }`}>{bundle.description}</p>
-              </div>
-
-              {/* Selection Indicator */}
-              {selectedBundle?.id === bundle.id && selectedBundle?.isCustom !== true && (
-                <div className="flex items-center space-x-2 text-white">
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="font-medium text-sm">Selected</span>
-                </div>
-              )}
-            </div>
+              {bundle.amount}
+            </ReusableButton>
           ))}
         </div>
       </div>
