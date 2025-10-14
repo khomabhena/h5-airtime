@@ -83,8 +83,30 @@ export const colors = {
 
 // Tailwind color mappings for easy reference
 export const tailwindColors = {
-  emerald: colors.primary,
-  green: colors.green,
+  emerald: {
+    50: '#ecfdf5',
+    100: '#d1fae5',
+    200: '#a7f3d0',
+    300: '#6ee7b7',
+    400: '#34d399',
+    500: '#10b981',
+    600: '#059669',
+    700: '#047857',
+    800: '#065f46',
+    900: '#064e3b',
+  },
+  green: {
+    50: '#f0fdf4',
+    100: '#dcfce7',
+    200: '#bbf7d0',
+    300: '#86efac',
+    400: '#4ade80',
+    500: '#22c55e',
+    600: '#16a34a',
+    700: '#15803d',
+    800: '#166534',
+    900: '#14532d',
+  },
   gray: colors.neutral,
   red: {
     500: colors.semantic.error,
@@ -110,19 +132,19 @@ export const buttonColors = {
   },
   secondary: {
     background: colors.background.primary,
-    backgroundHover: colors.primary[50],
+    backgroundHover: colors.neutral[100],
     text: colors.text.primary,
     border: colors.border.primary,
   },
   success: {
     background: colors.semantic.success,
-    backgroundHover: colors.primary[700],
+    backgroundHover: colors.app.primaryDark,
     text: colors.text.inverse,
     border: colors.semantic.success,
   },
   outline: {
     background: 'transparent',
-    backgroundHover: colors.primary[50],
+    backgroundHover: colors.neutral[100],
     text: colors.app.primary,
     border: colors.app.primary,
   },
