@@ -6,12 +6,22 @@ import CustomAirtimeInput from './CustomAirtimeInput';
 import Button from './Button';
 import { ReusableButton } from './buttons';
 import { colors } from '../data/colors';
+import { usePayment } from '../hooks/usePayment';
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
   const [bundleType, setBundleType] = useState('airtime');
   const [customBundle, setCustomBundle] = useState(null);
   const [clearCustomInput, setClearCustomInput] = useState(false);
+  
+  // Payment hook
+  const { 
+    loading: paymentLoading, 
+    error: paymentError, 
+    processPayment, 
+    clearError,
+    isPaymentAPIAvailable
+  } = usePayment();
 
   // Get bundles from data layer
   const bundles = getBundlesByType(bundleType);
@@ -36,9 +46,53 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
     }
   }, []);
 
-  const handleContinue = () => {
-    if (selectedBundle) {
+  const handleContinue = async () => {
+    if (!selectedBundle) return;
+
+    // Clear any previous errors
+    clearError();
+
+    // If payment API is not available, just navigate to payment page
+    if (!isPaymentAPIAvailable) {
+      console.warn('Payment API not available, navigating to payment page');
       navigate('/payment');
+      return;
+    }
+
+    try {
+      // Prepare payment data
+      const orderData = {
+        amount: Math.round(selectedBundle.price * 100), // Convert to cents
+        currency: 'USD',
+        description: selectedBundle.isCustom 
+          ? `Custom airtime $${selectedBundle.amount} for ${phoneData.recipientNumber}`
+          : `${selectedBundle.name} for ${phoneData.recipientNumber}`,
+        callbackInfo: JSON.stringify({
+          bundleId: selectedBundle.id,
+          bundleName: selectedBundle.name,
+          phoneNumber: phoneData.recipientNumber,
+          carrier: phoneData.recipientCarrier?.carrier.name
+        })
+      };
+
+      // Process payment
+      const result = await processPayment(orderData);
+
+      if (result.success) {
+        // Navigate to success page or show success message
+        navigate('/payment-success', { 
+          state: { 
+            paymentData: result.data,
+            bundle: selectedBundle,
+            phoneData: phoneData
+          } 
+        });
+      } else {
+        // Error is already handled by the hook, just log it
+        console.error('Payment failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
     }
   };
 
@@ -117,6 +171,32 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
         </div>
       </div>
 
+      {/* Payment Error Display */}
+      {paymentError && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div className="flex items-start space-x-3">
+            <svg className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-red-800">Payment Error</h4>
+              <p className="text-xs text-red-600 mt-1">{paymentError.message}</p>
+              {process.env.NODE_ENV === 'development' && paymentError.technicalMessage && (
+                <p className="text-xs text-red-500 mt-1 font-mono">{paymentError.technicalMessage}</p>
+              )}
+            </div>
+            <button
+              onClick={clearError}
+              className="text-red-500 hover:text-red-700"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Continue Button - Mobile Optimized */}
       {selectedBundle && (
         <div className="bg-white rounded-xl shadow-md p-4 border border-gray-100">
@@ -143,11 +223,27 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
             </div>
           </div>
           
+          {/* Payment API Availability Warning */}
+          {!isPaymentAPIAvailable && (
+            <div className="mb-3 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <div className="flex items-start space-x-2">
+                <svg className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p className="text-xs text-yellow-800">
+                  Payment API not detected. Open in SuperApp for full payment features.
+                </p>
+              </div>
+            </div>
+          )}
+          
           <Button
             onClick={handleContinue}
+            loading={paymentLoading}
+            disabled={paymentLoading}
             className="w-full py-3 text-base font-semibold"
           >
-            Continue to Payment
+            {paymentLoading ? 'Processing Payment...' : isPaymentAPIAvailable ? 'Pay Now' : 'Continue to Payment'}
           </Button>
         </div>
       )}
