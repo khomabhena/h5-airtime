@@ -5,6 +5,7 @@
  */
 
 import SuperAppPayment from '../../h5-automation-api/superapp/SuperAppPayment';
+import { webViewBridge } from '../utils/webViewBridge';
 
 class PaymentService {
   constructor() {
@@ -84,17 +85,28 @@ class PaymentService {
    */
   async showCashier(paymentParams) {
     try {
-      if (!window.payment) {
-        throw new Error('SuperApp payment API not available. Please open in SuperApp environment.');
-      }
-
       // Update active payment status
       if (this.activePayment) {
         this.activePayment.status = 'processing';
       }
 
-      // Show cashier
-      const result = await this.superApp.showPaymentCashier(paymentParams);
+      // Try to show cashier using WebView bridge
+      let result;
+      
+      try {
+        // Try standard window.payment first
+        if (window.payment?.payOrder) {
+          console.log('🎯 Using window.payment.payOrder');
+          result = await window.payment.payOrder(paymentParams);
+        } else {
+          // Try WebView bridge
+          console.log('🌉 Using WebView bridge for payOrder');
+          result = await webViewBridge.payOrder(paymentParams);
+        }
+      } catch (bridgeError) {
+        console.error('Bridge error:', bridgeError);
+        throw new Error(`Payment bridge failed: ${bridgeError.message}`);
+      }
 
       // Update status based on result
       if (this.activePayment) {
@@ -203,7 +215,18 @@ class PaymentService {
    */
   async getAuthToken() {
     try {
-      const token = await this.superApp.getAuthToken();
+      let token;
+      
+      // Try standard window.payment first
+      if (window.payment?.getAuthToken) {
+        console.log('🎯 Using window.payment.getAuthToken');
+        token = await window.payment.getAuthToken({ appId: this.superApp.appId });
+      } else {
+        // Try WebView bridge
+        console.log('🌉 Using WebView bridge for getAuthToken');
+        token = await webViewBridge.getAuthToken(this.superApp.appId);
+      }
+      
       return {
         success: true,
         data: token,
@@ -278,7 +301,29 @@ class PaymentService {
    * @returns {boolean} True if available
    */
   isPaymentAPIAvailable() {
-    return typeof window !== 'undefined' && !!window.payment;
+    // Check for window object first
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    // Check for standard window.payment first
+    if (window.payment && typeof window.payment === 'object') {
+      console.log('✅ SuperApp payment API detected (window.payment):', window.payment);
+      return true;
+    }
+
+    // Check for WebView bridges
+    const paymentBridge = webViewBridge.findPaymentBridge();
+    if (paymentBridge) {
+      console.log('✅ Payment bridge detected:', paymentBridge);
+      return true;
+    }
+
+    // Debug: Log what's available
+    console.log('❌ No payment API or bridge found');
+    console.log('WebView debug info:', webViewBridge.getDebugInfo());
+    
+    return false;
   }
 
   /**

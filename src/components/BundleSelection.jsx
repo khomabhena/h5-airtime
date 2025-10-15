@@ -7,6 +7,7 @@ import Button from './Button';
 import { ReusableButton } from './buttons';
 import { colors } from '../data/colors';
 import { usePayment } from '../hooks/usePayment';
+import SuperAppDebug from './SuperAppDebug';
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
@@ -52,8 +53,16 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
     // Clear any previous errors
     clearError();
 
-    // If payment API is not available, just navigate to payment page
-    if (!isPaymentAPIAvailable) {
+    // Log payment API status
+    console.log('🔍 Payment API Available:', isPaymentAPIAvailable);
+    console.log('🔍 window.payment:', window.payment);
+
+    // TEMPORARY: Allow payment to proceed even if API not detected for debugging
+    // Comment this out once SuperApp API is properly detected
+    const forcePaymentFlow = true;
+
+    // If payment API is not available and not forcing, navigate to payment page
+    if (!isPaymentAPIAvailable && !forcePaymentFlow) {
       console.warn('Payment API not available, navigating to payment page');
       navigate('/payment');
       return;
@@ -230,9 +239,14 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
                 <svg className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                <p className="text-xs text-yellow-800">
-                  Payment API not detected. Open in SuperApp for full payment features.
-                </p>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-yellow-800">
+                    SuperApp Payment API Not Detected
+                  </p>
+                  <p className="text-xs text-yellow-700 mt-1">
+                    Check the debug panel below for details. The payment will proceed in test mode.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -247,6 +261,9 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
           </Button>
         </div>
       )}
+
+      {/* SuperApp Debug Panel */}
+      <SuperAppDebug />
     </div>
   );
 };
