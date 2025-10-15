@@ -54,13 +54,13 @@ const Header = () => {
             <div className="mt-1 space-y-1">
               {/* Full URL */}
               <div className="px-2 py-1 bg-blue-50 rounded text-xs text-blue-700 font-mono break-all">
-                <span className="font-semibold">URL:</span> {fullUrl}
+                {/* <span className="font-semibold">URL:</span> {fullUrl} */}
               </div>
               
               {/* Token */}
               {token && (
                 <div className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600 font-mono">
-                  <span className="font-semibold">Token:</span> {token}
+                  {/* <span className="font-semibold">Token:</span> {token} */}
                 </div>
               )}
             </div>
