@@ -190,8 +190,29 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
             <div className="flex-1">
               <h4 className="text-sm font-semibold text-red-800">Payment Error</h4>
               <p className="text-xs text-red-600 mt-1">{paymentError.message}</p>
-              {process.env.NODE_ENV === 'development' && paymentError.technicalMessage && (
-                <p className="text-xs text-red-500 mt-1 font-mono">{paymentError.technicalMessage}</p>
+              
+              {/* Technical Details in Development */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="mt-2 p-2 bg-red-100 rounded text-xs">
+                  {paymentError.technicalMessage && (
+                    <p className="text-red-700 font-mono mb-1">
+                      <strong>Technical:</strong> {paymentError.technicalMessage}
+                    </p>
+                  )}
+                  {paymentError.type && (
+                    <p className="text-red-700">
+                      <strong>Type:</strong> {paymentError.type}
+                    </p>
+                  )}
+                  {paymentError.context && (
+                    <p className="text-red-700">
+                      <strong>Context:</strong> {paymentError.context}
+                    </p>
+                  )}
+                  <p className="text-red-600 mt-1 text-xs">
+                    💡 Check browser console (F12) for detailed logs
+                  </p>
+                </div>
               )}
             </div>
             <button

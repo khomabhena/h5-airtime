@@ -33,7 +33,24 @@ class WebViewBridge {
   detectBridge() {
     const bridges = [];
 
-    // Standard window.payment
+    // Check for AppNativeJsBridge (js-sdk.js)
+    if (window.AppNativeJsBridge && typeof window.AppNativeJsBridge === 'object') {
+      bridges.push({
+        name: 'window.AppNativeJsBridge',
+        type: 'superapp-sdk',
+        api: window.AppNativeJsBridge,
+        methods: Object.keys(window.AppNativeJsBridge),
+        sdkInfo: {
+          hasPayment: !!window.payment,
+          hasCallbacks: !!window.AppNativeJsBridgeCallback,
+          userAgent: navigator.userAgent,
+          isCustomer: navigator.userAgent.includes('Customer'),
+          isPartner: navigator.userAgent.includes('Partner')
+        }
+      });
+    }
+
+    // Standard window.payment (created by js-sdk.js)
     if (window.payment && typeof window.payment === 'object') {
       bridges.push({
         name: 'window.payment',

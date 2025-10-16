@@ -142,22 +142,42 @@ class PaymentService {
    */
   async processPayment(orderData) {
     try {
+      console.log('🚀 Starting payment process with data:', orderData);
+      
       // Step 1: Prepare payment
+      console.log('📝 Step 1: Preparing payment...');
       const prepareResult = await this.preparePayment(orderData);
       
+      console.log('📝 Prepare result:', prepareResult);
+      
       if (!prepareResult.success) {
-        throw new Error(prepareResult.error);
+        console.error('❌ Payment preparation failed:', prepareResult.error);
+        throw new Error(prepareResult.error || 'Payment preparation failed');
       }
+
+      console.log('✅ Payment prepared successfully');
+      console.log('💳 Payment params:', prepareResult.data.paymentParams);
 
       // Step 2: Show cashier
+      console.log('🏪 Step 2: Opening cashier...');
       const cashierResult = await this.showCashier(prepareResult.data.paymentParams);
       
+      console.log('🏪 Cashier result:', cashierResult);
+      
       if (!cashierResult.success) {
-        throw new Error(cashierResult.error);
+        console.error('❌ Cashier failed:', cashierResult.error);
+        throw new Error(cashierResult.error || 'Failed to open payment cashier');
       }
 
+      console.log('✅ Cashier opened successfully');
+
       // Step 3: Query payment status
+      console.log('🔍 Step 3: Querying payment status...');
       const statusResult = await this.queryPaymentStatus(prepareResult.data.outBizId);
+      
+      console.log('🔍 Status result:', statusResult);
+
+      console.log('✅ Payment process completed successfully!');
 
       return {
         success: true,
@@ -170,11 +190,17 @@ class PaymentService {
         message: 'Payment processed successfully'
       };
     } catch (error) {
-      console.error('Payment processing failed:', error);
+      console.error('❌ Payment processing failed:', error);
+      console.error('❌ Error stack:', error.stack);
       return {
         success: false,
         error: error.message,
-        message: 'Payment processing failed'
+        message: 'Payment processing failed',
+        details: {
+          errorName: error.name,
+          errorMessage: error.message,
+          errorStack: error.stack
+        }
       };
     }
   }
