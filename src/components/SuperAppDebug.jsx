@@ -9,6 +9,7 @@ import { webViewBridge } from '../utils/webViewBridge';
 
 const SuperAppDebug = () => {
   const [debugInfo, setDebugInfo] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const checkSuperApp = () => {
@@ -74,6 +75,11 @@ const SuperAppDebug = () => {
     return null;
   }
 
+  // Hidden state
+  if (!isVisible) {
+    return null;
+  }
+
   if (!debugInfo) {
     return <div className="p-4 bg-gray-100">Loading debug info...</div>;
   }
@@ -83,11 +89,9 @@ const SuperAppDebug = () => {
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-bold text-sm">🔧 SuperApp Debug Panel</h3>
         <button
-          onClick={() => {
-            const elem = document.getElementById('superapp-debug');
-            if (elem) elem.style.display = 'none';
-          }}
-          className="text-gray-400 hover:text-white"
+          onClick={() => setIsVisible(false)}
+          className="text-gray-400 hover:text-white px-2 py-1"
+          type="button"
         >
           ✕
         </button>
