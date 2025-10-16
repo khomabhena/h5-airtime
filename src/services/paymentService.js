@@ -90,6 +90,12 @@ class PaymentService {
         this.activePayment.status = 'processing';
       }
 
+      // Check if payment API is available
+      console.log('🔍 Checking payment API availability...');
+      console.log('  window.payment exists:', !!window.payment);
+      console.log('  window.payment.payOrder exists:', !!window.payment?.payOrder);
+      console.log('  AppNativeJsBridge exists:', !!window.AppNativeJsBridge);
+
       // Try to show cashier using WebView bridge
       let result;
       
@@ -97,15 +103,39 @@ class PaymentService {
         // Try standard window.payment first
         if (window.payment?.payOrder) {
           console.log('🎯 Using window.payment.payOrder');
+          console.log('  Payment params:', paymentParams);
           result = await window.payment.payOrder(paymentParams);
+          console.log('  Result from payOrder:', result);
         } else {
-          // Try WebView bridge
-          console.log('🌉 Using WebView bridge for payOrder');
+          console.warn('⚠️ window.payment.payOrder not available');
+          
+          // Check if SDK is loaded
+          if (!window.payment) {
+            throw new Error('SDK not loaded: window.payment is undefined. Check if js-sdk.js is loaded in index.html');
+          }
+          
+          // Try WebView bridge as fallback
+          console.log('🌉 Trying WebView bridge for payOrder');
+          const paymentBridge = webViewBridge.findPaymentBridge();
+          console.log('  Payment bridge found:', paymentBridge);
+          
+          if (!paymentBridge) {
+            throw new Error('No payment bridge available. Not running in SuperApp or AppNativeJsBridge not injected');
+          }
+          
           result = await webViewBridge.payOrder(paymentParams);
         }
       } catch (bridgeError) {
-        console.error('Bridge error:', bridgeError);
-        throw new Error(`Payment bridge failed: ${bridgeError.message}`);
+        console.error('❌ Bridge error details:', {
+          error: bridgeError,
+          message: bridgeError?.message,
+          code: bridgeError?.code,
+          stack: bridgeError?.stack
+        });
+        
+        // Better error message
+        const errorMsg = bridgeError?.message || bridgeError?.toString() || 'Unknown error';
+        throw new Error(`Payment bridge failed: ${errorMsg}`);
       }
 
       // Update status based on result

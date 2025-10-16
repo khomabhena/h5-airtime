@@ -7,6 +7,7 @@ import RecipientInput from './components/RecipientInput';
 import BundleSelection from './components/BundleSelection';
 import PaymentFlow from './components/PaymentFlow';
 import Confirmation from './components/Confirmation';
+import BridgeStatusIndicator from './components/BridgeStatusIndicator';
 import './App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex flex-col">
+        <BridgeStatusIndicator />
         <Header />
 
         {/* Main Content */}
