@@ -35,8 +35,8 @@ const UIVersionSwitcher = () => {
     }
   };
 
-  // Only show in development or with ?switcher=true
-  if (process.env.NODE_ENV !== 'development' && !location.search.includes('switcher=true')) {
+  // Always show the switcher (you can add ?switcher=false to hide it)
+  if (location.search.includes('switcher=false')) {
     return null;
   }
 
