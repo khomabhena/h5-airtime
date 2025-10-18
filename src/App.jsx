@@ -36,7 +36,7 @@ function App() {
 
         {/* V1 Routes - Original Design */}
         <Route path="*" element={
-          <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex flex-col">
+          <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex flex-col">
             <Header />
             <main className="flex-1 max-w-[900px] mx-auto px-4 py-12 w-full">
               <Routes>
