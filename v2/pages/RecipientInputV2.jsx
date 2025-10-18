@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePhoneValidation } from '../../src/hooks/usePhoneValidation';
 import InputField from '../../src/components/InputField';
 import Button from '../components/ButtonV2';
+import { colorsV2 } from '../data/colorsV2';
 
 const RecipientInputV2 = ({ phoneData, setPhoneData }) => {
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ const RecipientInputV2 = ({ phoneData, setPhoneData }) => {
               placeholder="+263 77 123 4567"
               error={validation.error}
               loading={validation.loading}
+              customColors={colorsV2}
               showCountryMap={validation.carrier ? true : false}
               countryData={validation.carrier ? {
                 flag: validation.carrier.country.flag,

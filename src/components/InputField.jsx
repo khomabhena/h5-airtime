@@ -18,8 +18,11 @@ const InputField = ({
   countryData = null,
   showCardType = false,
   cardTypeData = null,
+  customColors,
   ...props
 }) => {
+  // Use custom colors if provided, otherwise use default colors
+  const inputColors = customColors || colors;
   return (
     <div className={`space-y-2 ${className}`}>
       {label && (
@@ -43,8 +46,8 @@ const InputField = ({
           placeholder={placeholder}
           disabled={disabled}
           style={{
-            borderColor: error ? colors.border.error : colors.border.purple,
-            color: colors.text.black
+            borderColor: error ? inputColors.border.error : inputColors.border.purple,
+            color: inputColors.text.black
           }}
           className={`w-full border-2 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent text-base transition-all duration-200 ${
             icon ? 'pl-12' : 'pl-4'
@@ -53,7 +56,7 @@ const InputField = ({
           } ${
             disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
           } py-3`}
-          onFocus={(e) => e.target.style.boxShadow = error ? `0 0 0 3px ${colors.ring.error}40` : `0 0 0 3px ${colors.ring.primary}40`}
+          onFocus={(e) => e.target.style.boxShadow = error ? `0 0 0 3px ${inputColors.ring.error}40` : `0 0 0 3px ${inputColors.ring.primary}40`}
           onBlur={(e) => e.target.style.boxShadow = 'none'}
           {...props}
         />
@@ -87,7 +90,7 @@ const InputField = ({
       {showCountryMap && countryData && (
         <div className="mt-3 space-y-2">
           {/* Country Information */}
-          <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border rounded-lg" style={{borderColor: colors.border.blue}}>
+          <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border rounded-lg" style={{borderColor: inputColors.border.blue}}>
             <div className="flex items-center space-x-3">
               <div className="text-2xl" style={{fontSize: '24px'}}>{countryData.flag}</div>
               <div className="flex-1">
@@ -97,9 +100,9 @@ const InputField = ({
               <div className="text-right">
                 <div className="text-xs text-gray-500">Network Coverage</div>
                 <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: colors.state.successLight}}></div>
-                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: colors.state.successLight}}></div>
-                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: colors.state.successLight}}></div>
+                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: inputColors.state.successLight}}></div>
+                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: inputColors.state.successLight}}></div>
+                  <div className="w-2 h-2 rounded-full" style={{backgroundColor: inputColors.state.successLight}}></div>
                   <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
                   <span className="text-xs text-gray-600 ml-1">Good</span>
                 </div>
@@ -109,7 +112,7 @@ const InputField = ({
           
           {/* Carrier Information */}
           {countryData.carrier && (
-            <div className={`p-3 bg-gradient-to-r ${colors.background.gradient.purple} border rounded-lg`} style={{borderColor: colors.border.purple}}>
+            <div className={`p-3 bg-gradient-to-r ${inputColors.background.gradient.purple} border rounded-lg`} style={{borderColor: inputColors.border.purple}}>
               <div className="flex items-center space-x-3">
                 <div 
                   className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md"
@@ -119,7 +122,7 @@ const InputField = ({
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-800 text-sm">{countryData.carrier.name}</h4>
-                  <p className="text-xs" style={{color: colors.app.primary}}>Network: {countryData.carrier.networkType}</p>
+                  <p className="text-xs" style={{color: inputColors.app.primary}}>Network: {countryData.carrier.networkType}</p>
                   <p className="text-xs text-gray-600">Coverage: {countryData.carrier.coverage}</p>
                 </div>
                 <div className="text-right">
@@ -139,7 +142,7 @@ const InputField = ({
           <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="font-medium text-sm" style={{color: colors.state.error}}>{error}</p>
+          <p className="font-medium text-sm" style={{color: inputColors.state.error}}>{error}</p>
         </div>
       )}
     </div>

@@ -124,6 +124,7 @@ const PhoneInputV2 = ({ phoneData, setPhoneData, topUpType, setTopUpType }) => {
               placeholder="+263 77 123 4567"
               error={validation.error}
               loading={validation.loading}
+              customColors={colorsV2}
               showCountryMap={validation.carrier ? true : false}
               countryData={validation.carrier ? {
                 flag: validation.carrier.country.flag,
