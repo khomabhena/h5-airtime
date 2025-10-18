@@ -36,7 +36,7 @@ const PaymentV2 = ({ phoneData, selectedBundle, setPaymentData }) => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Main Content - Full Length */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full flex-1 flex flex-col">
+      <div className="bg-white shadow-lg border border-gray-100 w-full flex-1 flex flex-col">
         <div className="p-6 flex-1">
           {/* Header */}
           <div className="text-center mb-6">
