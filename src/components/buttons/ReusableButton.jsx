@@ -20,6 +20,7 @@ import { colors } from '../../data/colors';
  * @param {string} props.subtitle - Subtitle for card variant
  * @param {string} props.description - Description for card variant
  * @param {boolean} props.showSelectionIndicator - Show selection indicator for card variant
+ * @param {Object} props.customColors - Custom color scheme (overrides default colors)
  * @param {...Object} props.rest - Additional props passed to button element
  */
 const ReusableButton = ({
@@ -39,8 +40,12 @@ const ReusableButton = ({
   subtitle,
   description,
   showSelectionIndicator = true,
+  // Custom colors prop
+  customColors,
   ...rest
 }) => {
+  // Use custom colors if provided, otherwise use default colors
+  const buttonColors = customColors || colors;
   const baseClasses = 'font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer';
   
   // Variant-specific styling
@@ -50,27 +55,27 @@ const ReusableButton = ({
     switch (variant) {
       case 'selection':
         return isSelected 
-          ? `border-2 border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white`
+          ? `border-2 border-[${buttonColors.app.primary}] bg-[${buttonColors.app.primary}] text-white`
           : 'border-2 border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50';
       
       case 'card':
         return isSelected 
-          ? `border-2 border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white rounded-xl`
+          ? `border-2 border-[${buttonColors.app.primary}] bg-[${buttonColors.app.primary}] text-white rounded-xl`
           : 'border-2 border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-xl';
       
       case 'action':
         return isSelected 
-          ? `border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:bg-[${colors.app.primaryDark}]`
-          : `bg-[${colors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:bg-[${colors.app.primaryDark}]`;
+          ? `border-[${buttonColors.app.primary}] bg-[${buttonColors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:bg-[${buttonColors.app.primaryDark}]`
+          : `bg-[${buttonColors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:bg-[${buttonColors.app.primaryDark}]`;
       
       case 'outline':
         return isSelected
-          ? `border-2 border-[${colors.app.primary}] bg-[${colors.app.primary}] text-white`
-          : `border-2 border-[${colors.app.primary}] bg-transparent text-[${colors.app.primary}] hover:bg-[${colors.app.primary}] hover:text-white`;
+          ? `border-2 border-[${buttonColors.app.primary}] bg-[${buttonColors.app.primary}] text-white`
+          : `border-2 border-[${buttonColors.app.primary}] bg-transparent text-[${buttonColors.app.primary}] hover:bg-[${buttonColors.app.primary}] hover:text-white`;
       
       case 'ghost':
         return isSelected
-          ? `bg-[${colors.app.primary}] text-white`
+          ? `bg-[${buttonColors.app.primary}] text-white`
           : 'bg-transparent text-gray-700 hover:bg-gray-100';
       
       case 'danger':
@@ -84,7 +89,7 @@ const ReusableButton = ({
           : 'border-2 border-green-300 bg-white text-green-600 hover:border-green-400 hover:bg-green-50';
       
       default:
-        return `bg-[${colors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5`;
+        return `bg-[${buttonColors.app.primary}] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5`;
     }
   };
   
@@ -111,7 +116,7 @@ const ReusableButton = ({
     switch (variant) {
       case 'danger': return 'focus:ring-red-500';
       case 'success': return 'focus:ring-green-500';
-      default: return `focus:ring-[${colors.app.primary}]`;
+      default: return `focus:ring-[${buttonColors.app.primary}]`;
     }
   };
 

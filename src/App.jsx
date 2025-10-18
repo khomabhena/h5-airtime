@@ -7,7 +7,9 @@ import RecipientInput from './components/RecipientInput';
 import BundleSelection from './components/BundleSelection';
 import PaymentFlow from './components/PaymentFlow';
 import Confirmation from './components/Confirmation';
-import BridgeStatusIndicator from './components/BridgeStatusIndicator';
+import AppV2 from '../v2/AppV2';
+import UIVersionSwitcher from '../v2/components/UIVersionSwitcher';
+// import BridgeStatusIndicator from './components/BridgeStatusIndicator'; // Disabled - causing infinite loop
 import './App.css';
 
 function App() {
@@ -26,13 +28,18 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex flex-col">
-        <BridgeStatusIndicator />
-        <Header />
+      <UIVersionSwitcher />
+      
+      <Routes>
+        {/* V2 Routes - SuperApp Design */}
+        <Route path="/v2/*" element={<AppV2 />} />
 
-        {/* Main Content */}
-        <main className="flex-1 max-w-[900px] mx-auto px-4 py-12 w-full">
-          <Routes>
+        {/* V1 Routes - Original Design */}
+        <Route path="*" element={
+          <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex flex-col">
+            <Header />
+            <main className="flex-1 max-w-[900px] mx-auto px-4 py-12 w-full">
+              <Routes>
             <Route 
               path="/" 
               element={
@@ -83,11 +90,12 @@ function App() {
                 />
               } 
             />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        } />
+      </Routes>
     </Router>
   );
 }

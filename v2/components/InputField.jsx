@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors } from '../data/colors';
+import { colors } from '../../src/data/colors';
 
 const InputField = ({
   type = 'text',
@@ -18,6 +18,7 @@ const InputField = ({
   countryData = null,
   showCardType = false,
   cardTypeData = null,
+  validation = null,
   ...props
 }) => {
   return (
@@ -112,7 +113,7 @@ const InputField = ({
             <div className={`p-3 bg-gradient-to-r ${colors.background.gradient.purple} border rounded-lg`} style={{borderColor: colors.border.purple}}>
               <div className="flex items-center space-x-3">
                 <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md"
+                  className="history w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md"
                   style={{ backgroundColor: countryData.carrier.logoColor }}
                 >
                   {countryData.carrier.logoText}
@@ -129,6 +130,24 @@ const InputField = ({
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Validation Messages */}
+      {validation && validation.carrier && (
+        <div className="text-sm text-gray-600">
+          <div className="flex items-center space-x-2">
+            <span className="font-medium">Carrier:</span>
+            <span>{validation.carrier.name}</span>
+          </div>
+          {validation.isValid && validation.isComplete && (
+            <div className="flex items-center space-x-2 mt-1 text-green-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-xs">Valid phone number</span>
             </div>
           )}
         </div>

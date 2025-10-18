@@ -1,12 +1,12 @@
-// Color definitions for H5 Airtime App
-// Simplified - Only colors actually used in the app
+// Color definitions for H5 Airtime App V2
+// Purple theme for V2 experimental version
 
-export const colors = {
-  // App primary colors
+export const colorsV2 = {
+  // App primary colors - Purple theme
   app: {
-    primary: '#8dd000',        // Main green
-    primaryLight: '#8dd00020', // Light green with opacity
-    primaryDark: '#65a30d',    // Darker green
+    primary: '#662d91',        // Main purple
+    primaryLight: '#662d9120', // Light purple with opacity
+    primaryDark: '#4d2270',    // Darker purple
   },
 
   // Text colors
@@ -27,7 +27,7 @@ export const colors = {
     },
     gradient: {
       blue: 'from-blue-50 to-indigo-50',      // Blue gradient
-      purple: 'from-purple-50 to-indigo-50',  // Purple gradient (updated from emerald)
+      purple: 'from-purple-50 to-indigo-50',  // Purple gradient
     }
   },
 
@@ -35,8 +35,8 @@ export const colors = {
   border: {
     primary: '#e5e7eb',    // Light gray border
     secondary: '#d1d5db',  // Medium gray border
-    accent: '#8dd000',     // Green border
-    focus: '#8dd000',      // Green focus
+    accent: '#662d91',     // Purple border
+    focus: '#662d91',      // Purple focus
     error: '#fca5a5',      // Light red border (red-300)
     blue: '#bfdbfe',       // Blue border (blue-200)
     purple: '#e9d5ff',     // Purple border (purple-200)
@@ -55,10 +55,11 @@ export const colors = {
 
   // Ring/Focus colors
   ring: {
-    primary: '#8dd000',    // Green focus ring
+    primary: '#662d91',    // Purple focus ring
     error: '#ef4444',      // Red focus ring
   }
 };
 
 // Export default
-export default colors;
+export default colorsV2;
+

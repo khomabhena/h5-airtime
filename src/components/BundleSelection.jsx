@@ -6,8 +6,8 @@ import CustomAirtimeInput from './CustomAirtimeInput';
 import Button from './Button';
 import { ReusableButton } from './buttons';
 import { colors } from '../data/colors';
-import { usePayment } from '../hooks/usePayment';
-import SuperAppDebug from './SuperAppDebug';
+// import { usePayment } from '../hooks/usePayment'; // Disabled - may cause infinite loop
+// import SuperAppDebug from './SuperAppDebug'; // Disabled
 
 const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const navigate = useNavigate();
@@ -15,14 +15,19 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
   const [customBundle, setCustomBundle] = useState(null);
   const [clearCustomInput, setClearCustomInput] = useState(false);
   
-  // Payment hook
-  const { 
-    loading: paymentLoading, 
-    error: paymentError, 
-    processPayment, 
-    clearError,
-    isPaymentAPIAvailable
-  } = usePayment();
+  // Payment hook - DISABLED temporarily
+  // const { 
+  //   loading: paymentLoading, 
+  //   error: paymentError, 
+  //   processPayment, 
+  //   clearError,
+  //   isPaymentAPIAvailable
+  // } = usePayment();
+  
+  // Temporary placeholder values
+  const paymentLoading = false;
+  const paymentError = null;
+  const isPaymentAPIAvailable = false;
 
   // Get bundles from data layer
   const bundles = getBundlesByType(bundleType);
@@ -47,61 +52,9 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
     }
   }, []);
 
-  const handleContinue = async () => {
-    if (!selectedBundle) return;
-
-    // Clear any previous errors
-    clearError();
-
-    // Log payment API status
-    console.log('🔍 Payment API Available:', isPaymentAPIAvailable);
-    console.log('🔍 window.payment:', window.payment);
-
-    // TEMPORARY: Allow payment to proceed even if API not detected for debugging
-    // Comment this out once SuperApp API is properly detected
-    const forcePaymentFlow = true;
-
-    // If payment API is not available and not forcing, navigate to payment page
-    if (!isPaymentAPIAvailable && !forcePaymentFlow) {
-      console.warn('Payment API not available, navigating to payment page');
+  const handleContinue = () => {
+    if (selectedBundle) {
       navigate('/payment');
-      return;
-    }
-
-    try {
-      // Prepare payment data
-      const orderData = {
-        amount: Math.round(selectedBundle.price * 100), // Convert to cents
-        currency: 'USD',
-        description: selectedBundle.isCustom 
-          ? `Custom airtime $${selectedBundle.amount} for ${phoneData.recipientNumber}`
-          : `${selectedBundle.name} for ${phoneData.recipientNumber}`,
-        callbackInfo: JSON.stringify({
-          bundleId: selectedBundle.id,
-          bundleName: selectedBundle.name,
-          phoneNumber: phoneData.recipientNumber,
-          carrier: phoneData.recipientCarrier?.carrier.name
-        })
-      };
-
-      // Process payment
-      const result = await processPayment(orderData);
-
-      if (result.success) {
-        // Navigate to success page or show success message
-        navigate('/payment-success', { 
-          state: { 
-            paymentData: result.data,
-            bundle: selectedBundle,
-            phoneData: phoneData
-          } 
-        });
-      } else {
-        // Error is already handled by the hook, just log it
-        console.error('Payment failed:', result.error);
-      }
-    } catch (error) {
-      console.error('Payment error:', error);
     }
   };
 
@@ -180,52 +133,7 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
         </div>
       </div>
 
-      {/* Payment Error Display */}
-      {paymentError && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <div className="flex items-start space-x-3">
-            <svg className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-red-800">Payment Error</h4>
-              <p className="text-xs text-red-600 mt-1">{paymentError.message}</p>
-              
-              {/* Technical Details in Development */}
-              {process.env.NODE_ENV === 'development' && (
-                <div className="mt-2 p-2 bg-red-100 rounded text-xs">
-                  {paymentError.technicalMessage && (
-                    <p className="text-red-700 font-mono mb-1">
-                      <strong>Technical:</strong> {paymentError.technicalMessage}
-                    </p>
-                  )}
-                  {paymentError.type && (
-                    <p className="text-red-700">
-                      <strong>Type:</strong> {paymentError.type}
-                    </p>
-                  )}
-                  {paymentError.context && (
-                    <p className="text-red-700">
-                      <strong>Context:</strong> {paymentError.context}
-                    </p>
-                  )}
-                  <p className="text-red-600 mt-1 text-xs">
-                    💡 Check browser console (F12) for detailed logs
-                  </p>
-                </div>
-              )}
-            </div>
-            <button
-              onClick={clearError}
-              className="text-red-500 hover:text-red-700"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Payment Error Display - Disabled */}
 
       {/* Continue Button - Mobile Optimized */}
       {selectedBundle && (
@@ -253,38 +161,17 @@ const BundleSelection = ({ phoneData, selectedBundle, setSelectedBundle }) => {
             </div>
           </div>
           
-          {/* Payment API Availability Warning */}
-          {!isPaymentAPIAvailable && (
-            <div className="mb-3 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-              <div className="flex items-start space-x-2">
-                <svg className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <div className="flex-1">
-                  <p className="text-xs font-semibold text-yellow-800">
-                    SuperApp Payment API Not Detected
-                  </p>
-                  <p className="text-xs text-yellow-700 mt-1">
-                    Check the debug panel below for details. The payment will proceed in test mode.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-          
           <Button
             onClick={handleContinue}
-            loading={paymentLoading}
-            disabled={paymentLoading}
             className="w-full py-3 text-base font-semibold"
           >
-            {paymentLoading ? 'Processing Payment...' : isPaymentAPIAvailable ? 'Pay Now' : 'Continue to Payment'}
+            Continue to Payment
           </Button>
         </div>
       )}
 
-      {/* SuperApp Debug Panel */}
-      <SuperAppDebug />
+      {/* SuperApp Debug Panel - Disabled temporarily */}
+      {/* <SuperAppDebug /> */}
     </div>
   );
 };

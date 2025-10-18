@@ -11,36 +11,60 @@ const BridgeStatusIndicator = () => {
 
   useEffect(() => {
     const checkBridge = () => {
-      const hasBridge = !!window.AppNativeJsBridge;
-      const hasPayment = !!window.payment;
-      const userAgent = navigator.userAgent;
-      const hasCustomer = userAgent.includes('Customer');
-      const hasPartner = userAgent.includes('Partner');
-      
-      // Check if it's the mock bridge
-      const isMock = hasBridge && window.AppNativeJsBridge.postMessage.toString().includes('Mock');
-      
-      // Check if it's real SuperApp
-      const isRealSuperApp = hasBridge && !isMock && (hasCustomer || hasPartner);
-      
-      setStatus({
-        hasBridge,
-        hasPayment,
-        isMock,
-        isRealSuperApp,
-        hasCustomer,
-        hasPartner,
-        userAgent
-      });
+      try {
+        const hasBridge = !!window.AppNativeJsBridge;
+        const hasPayment = !!window.payment;
+        const userAgent = navigator.userAgent || '';
+        const hasCustomer = userAgent.includes('Customer');
+        const hasPartner = userAgent.includes('Partner');
+        
+        // Safely check if it's the mock bridge
+        let isMock = false;
+        if (hasBridge) {
+          try {
+            const postMessageStr = window.AppNativeJsBridge.postMessage?.toString() || '';
+            isMock = postMessageStr.includes('Mock');
+          } catch (e) {
+            console.warn('Could not check bridge type:', e);
+            isMock = false;
+          }
+        }
+        
+        // Check if it's real SuperApp
+        const isRealSuperApp = hasBridge && !isMock && (hasCustomer || hasPartner);
+        
+        setStatus({
+          hasBridge,
+          hasPayment,
+          isMock,
+          isRealSuperApp,
+          hasCustomer,
+          hasPartner,
+          userAgent
+        });
+      } catch (error) {
+        console.error('Error checking bridge status:', error);
+        // Set safe defaults
+        setStatus({
+          hasBridge: false,
+          hasPayment: false,
+          isMock: false,
+          isRealSuperApp: false,
+          hasCustomer: false,
+          hasPartner: false,
+          userAgent: 'Error'
+        });
+      }
     };
 
+    // Initial check
     checkBridge();
     
-    // Recheck every 2 seconds
-    const interval = setInterval(checkBridge, 2000);
+    // Recheck every 3 seconds (increased from 2)
+    const interval = setInterval(checkBridge, 3000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, []); // Empty dependency array - only run once on mount
 
   if (!status) {
     return null;
@@ -68,7 +92,7 @@ const BridgeStatusIndicator = () => {
   }
 
   return (
-    <div className={`fixed top-0 left-0 right-0 ${statusColor} text-white px-4 py-2 z-50 shadow-lg`}>
+    <div className={`${statusColor} text-white px-4 py-2 shadow-lg`}>
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <span className="text-2xl">{statusIcon}</span>
